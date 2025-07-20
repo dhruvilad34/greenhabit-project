@@ -1,0 +1,26 @@
+{% extends "tracker/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>📌 My Submitted Goals</h2>
+
+    {% for goal in goals %}
+        <div class="card mb-3">
+            <div class="card-body">
+              <a href="{% url 'edit_goal' goal.id %}" class="btn btn-sm btn-outline-primary me-2">✏️ Edit</a>
+<form method="post" action="{% url 'delete_goal' goal.id %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-sm btn-outline-danger">🗑️ Delete</button>
+</form>
+
+                <h4>{{ goal.title }}</h4>
+                <p>{{ goal.description }}</p>
+                <p><strong>Category:</strong> {{ goal.get_category_display }}</p>
+
+                <!-- Edit & Delete buttons (optional next step) -->
+            </div>
+        </div>
+    {% empty %}
+        <p>You have not submitted any goals yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

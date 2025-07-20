@@ -1,0 +1,12 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<div class="container mt-4 text-center">
+    <h2>📊 Visit History</h2>
+    <p><strong>Number of visits today:</strong> {{ visit_count }}</p>
+    {% if last_visit %}
+        <p><strong>Last visited at:</strong> {{ last_visit }}</p>
+    {% else %}
+        <p>This is your first visit!</p>
+    {% endif %}
+</div>
+{% endblock %}

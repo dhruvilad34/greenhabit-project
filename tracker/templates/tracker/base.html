@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GreenHabit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ✅ Header with Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+            <a class="navbar-brand" href="/">🌿 GreenHabit</a>
+            <div class="ml-auto">
+                <a href="{% url 'goal_list' %}" class="btn btn-outline-success">All Goals</a>
+                <a href="{% url 'submit_goal' %}" class="btn btn-success">Submit Goal</a>
+            </div>
+        </nav>
+
+        <!-- ✅ Flash Messages -->
+        {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </header>
+
+    <!-- ✅ Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ✅ Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>🌿 <strong>GreenHabit</strong> - Helping you track and achieve your eco-goals.</p>
+            <p>
+                <a href="{% url 'home' %}" class="text-light me-3">Home</a> |
+                <a href="{% url 'goal_list' %}" class="text-light mx-3">Goals</a> |
+                <a href="{% url 'submit_goal' %}" class="text-light mx-3">Submit Goal</a> |
+                <a href="{% url 'profile' %}" class="text-light mx-3">My Profile</a> |
+                <a href="{% url 'about' %}" class="text-light ms-3">About Us</a>
+            </p>
+            <p class="mb-0"><small>© 2025 GreenHabit. All rights reserved.</small></p>
+        </div>
+    </footer>
+
+    <!-- ✅ Bootstrap JS (optional for dropdowns/modals) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% extends "tracker/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>✏️ Edit Goal</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Update Goal</button>
+    </form>
+</div>
+{% endblock %}

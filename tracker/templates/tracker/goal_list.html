@@ -1,0 +1,96 @@
+{% extends "tracker/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>🌱 All Submitted Goals</h2>
+
+    <!-- ✅ Search Form -->
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-5">
+            <input type="text" name="q" class="form-control" placeholder="Search goals..." value="{{ query }}">
+        </div>
+        <div class="col-md-4">
+            <select name="category" class="form-select">
+                <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All Categories</option>
+                <option value="waste" {% if selected_category == 'waste' %}selected{% endif %}>Waste Reduction</option>
+                <option value="energy" {% if selected_category == 'energy' %}selected{% endif %}>Energy Saving</option>
+                <option value="transport" {% if selected_category == 'transport' %}selected{% endif %}>Green Transportation</option>
+                <option value="food" {% if selected_category == 'food' %}selected{% endif %}>Sustainable Food</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-success w-100">Search</button>
+        </div>
+    </form>
+
+    <!-- ✅ Goal List with Likes and Comments -->
+    {% for goal in goals %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">{{ goal.title }}</h4>
+                <p class="card-text">{{ goal.description }}</p>
+                <p class="card-text"><strong>Category:</strong> {{ goal.get_category_display }}</p>
+                <small><strong>By:</strong> {{ goal.user.username }}</small><br>
+
+
+                <!-- 👍 Like Button -->
+    <form method="post" action="{% url 'like_goal' goal.id %}" class="mt-2">
+        {% csrf_token %}
+        <button class="btn btn-sm btn-outline-success" type="submit">
+            👍 Like ({{ goal.likes.count }})
+        </button>
+    </form>
+
+    <!-- 💬 Comment Form -->
+    <form method="post" action="{% url 'add_comment' goal.id %}" class="mt-3">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="text" name="text" class="form-control" placeholder="Add a comment..." required>
+            <button class="btn btn-outline-primary" type="submit">Post</button>
+        </div>
+                </form>
+
+                <!-- 📝 Comments -->
+                <div class="mt-3">
+                    <strong>Comments ({{ goal.comment_set.count }}):</strong>
+                    <ul class="list-group list-group-flush">
+                        {% for comment in goal.comment_set.all %}
+                            <li class="list-group-item">
+                                <strong>{{ comment.user.username }}:</strong> {{ comment.text }}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">No comments yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No goals found.</p>
+    {% endfor %}
+
+    <!-- ✅ Pagination Controls -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if goals.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ goals.previous_page_number }}&q={{ query }}&category={{ selected_category }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ goals.number }} of {{ goals.paginator.num_pages }}</span>
+            </li>
+
+            {% if goals.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ goals.next_page_number }}&q={{ query }}&category={{ selected_category }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

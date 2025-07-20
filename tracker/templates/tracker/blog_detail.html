@@ -1,0 +1,38 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p><strong>Author:</strong> {{ post.author }}</p>
+<p><strong>Posted on:</strong> {{ post.created_at }}</p>
+
+{% if post.image %}
+    <img src="{{ post.image.url }}" alt="Post Image" style="max-width: 100%; height: auto;">
+{% endif %}
+
+<div class="mt-4">
+    <p>{{ post.content }}</p>
+</div>
+
+<a href="{% url 'blog_list' %}">← Back to Blog</a>
+<h3>💬 Comments</h3>
+
+<form method="POST">
+    {% csrf_token %}
+    <textarea name="comment" class="form-control mb-2" placeholder="Write a comment..." required></textarea>
+    <button type="submit" class="btn btn-success">Post Comment</button>
+</form>
+
+<hr>
+
+{% for comment in comments %}
+    <div class="mb-3">
+        <strong>{{ comment.user.username }}</strong> on {{ comment.created_at|date:"Y-m-d H:i" }}<br>
+        {{ comment.text }}
+    </div>
+{% empty %}
+    <p>No comments yet. Be the first!</p>
+{% endfor %}
+
+{% endblock %}
